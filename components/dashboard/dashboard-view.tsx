@@ -4,7 +4,6 @@ import { useCallback, useEffect, useState } from "react";
 import { RefreshCw, CheckCircle2 } from "lucide-react";
 import { SummaryCards } from "./summary-cards";
 import { ClinicsTable } from "./clinics-table";
-import { InvestmentChart } from "./investment-chart";
 import { ErrorState } from "./error-state";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -97,8 +96,7 @@ export function DashboardView() {
         <p className="text-xs leading-relaxed text-zinc-500">
           <span className="font-medium text-zinc-400">Sobre os dados:</span> Os dados de
           investimento e desempenho são consultados diretamente da API oficial da Meta. O
-          faturamento exibido é apenas uma estimativa interna calculada com base em 10× o
-          valor investido — não representa dado real fornecido pela Meta.
+          faturamento exibido é apenas uma estimativa interna — não representa dado real fornecido pela Meta.
         </p>
       </div>
 
@@ -113,11 +111,6 @@ export function DashboardView() {
       {/* Tabela de clínicas */}
       {status !== "error" && (
         <ClinicsTable clinics={data?.clinics} isLoading={isLoading} />
-      )}
-
-      {/* Gráfico comparativo */}
-      {status !== "error" && (
-        <InvestmentChart clinics={data?.clinics} isLoading={isLoading} />
       )}
     </div>
   );

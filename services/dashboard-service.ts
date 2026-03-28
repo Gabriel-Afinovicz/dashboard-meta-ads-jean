@@ -11,7 +11,7 @@ export async function getDashboardData(): Promise<DashboardData> {
   const rawInsights = await fetchAllAccountsInsights();
   const { label, since, until } = getLastMonthRange();
 
-  const clinics = rawInsights.map(normalizeInsight);
+  const clinics = rawInsights.map(normalizeInsight).filter((c) => c.spend > 0);
 
   const summary: DashboardSummary = {
     totalSpend: clinics.reduce((acc, c) => acc + c.spend, 0),

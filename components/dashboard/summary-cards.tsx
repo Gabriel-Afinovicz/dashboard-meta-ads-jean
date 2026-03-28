@@ -63,7 +63,7 @@ export function SummaryCards({ summary, isLoading }: SummaryCardsProps) {
     {
       title: "Faturamento estimado",
       value: formatCurrency(summary.totalEstimatedRevenue),
-      subtitle: "Estimativa 10× o investimento",
+      subtitle: "Estimativa com base no investimento",
       icon: <TrendingUp className="h-4 w-4" />,
       accent: "text-violet-400",
     },

@@ -125,9 +125,6 @@ export function InvestmentChart({ clinics, isLoading }: InvestmentChartProps) {
             />
           </BarChart>
         </ResponsiveContainer>
-        <p className="mt-3 text-center text-xs text-zinc-600">
-          Faturamento estimado = Investimento × 10 (multiplicador interno fixo)
-        </p>
       </CardContent>
     </Card>
   );

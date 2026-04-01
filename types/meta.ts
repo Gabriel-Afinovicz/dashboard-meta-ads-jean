@@ -60,6 +60,8 @@ export interface DashboardData {
   clinics: ClinicMetrics[];
   summary: DashboardSummary;
   lastUpdated: string;
+  dataSource: "snapshot" | "live";
+  snapshotSavedAt?: string;
 }
 
 // Resposta da API route interna

@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { RefreshCw, CheckCircle2, Save, DatabaseZap } from "lucide-react";
+import { RefreshCw, CheckCircle2, DatabaseZap } from "lucide-react";
 import { SummaryCards } from "./summary-cards";
 import { ClinicsTable } from "./clinics-table";
 import { ErrorState } from "./error-state";
@@ -23,8 +23,6 @@ export function DashboardView() {
   const [data, setData] = useState<DashboardData | null>(null);
   const [status, setStatus] = useState<FetchStatus>("idle");
   const [errorMessage, setErrorMessage] = useState<string | undefined>();
-  const [isSaving, setIsSaving] = useState(false);
-
   const fetchData = useCallback(async () => {
     setStatus("loading");
     setErrorMessage(undefined);
@@ -42,26 +40,6 @@ export function DashboardView() {
     } catch (err) {
       setErrorMessage(err instanceof Error ? err.message : "Erro ao carregar dados");
       setStatus("error");
-    }
-  }, []);
-
-  const saveSnapshot = useCallback(async () => {
-    setIsSaving(true);
-    try {
-      const response = await fetch("/api/snapshot", { method: "POST", cache: "no-store" });
-      const json = await response.json();
-
-      if (!response.ok || json.status === "error") {
-        throw new Error(json.error ?? "Erro ao salvar snapshot");
-      }
-
-      setData(json.data);
-      setStatus("success");
-    } catch (err) {
-      setErrorMessage(err instanceof Error ? err.message : "Erro ao salvar snapshot");
-      setStatus("error");
-    } finally {
-      setIsSaving(false);
     }
   }, []);
 
@@ -119,27 +97,16 @@ export function DashboardView() {
           )}
         </div>
 
-        <div className="flex shrink-0 items-start gap-2 self-start">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={saveSnapshot}
-            disabled={isLoading || isSaving}
-            title="Busca dados atuais da Meta e salva como snapshot permanente"
-          >
-            <Save className={`h-3.5 w-3.5 ${isSaving ? "animate-pulse" : ""}`} />
-            {isSaving ? "Salvando…" : "Salvar snapshot"}
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={fetchData}
-            disabled={isLoading || isSaving}
-          >
-            <RefreshCw className={`h-3.5 w-3.5 ${isLoading ? "animate-spin" : ""}`} />
-            {isLoading ? "Carregando…" : "Atualizar"}
-          </Button>
-        </div>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={fetchData}
+          disabled={isLoading}
+          className="shrink-0 self-start"
+        >
+          <RefreshCw className={`h-3.5 w-3.5 ${isLoading ? "animate-spin" : ""}`} />
+          {isLoading ? "Carregando…" : "Atualizar dados"}
+        </Button>
       </div>
 
       {/* Aviso informativo */}
@@ -148,11 +115,6 @@ export function DashboardView() {
           <span className="font-medium text-zinc-400">Sobre os dados:</span> Os dados de
           investimento e desempenho são consultados diretamente da API oficial da Meta. O
           faturamento exibido é apenas uma estimativa interna — não representa dado real fornecido pela Meta.
-          {isSnapshot && (
-            <span className="ml-1 text-zinc-500">
-              Os dados exibidos são de um <span className="font-medium text-zinc-400">snapshot salvo</span> e não serão alterados automaticamente.
-            </span>
-          )}
         </p>
       </div>
 
